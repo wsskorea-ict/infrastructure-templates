@@ -1,0 +1,325 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Description: "Application VPC for WSSKOREA Portal"
+
+Resources:
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: "10.0.0.0/16"
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+      Tags:
+        - Key: "Name"
+          Value: "portal-vpc"
+        - Key: "project"
+          Value: "portal"
+        - Key: "project:type"
+          Value: "general"
+  IGW:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: "Name"
+          Value: "portal-igw"
+        - Key: "project"
+          Value: "portal"
+        - Key: "project:type"
+          Value: "general"
+  IGWAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref VPC
+      InternetGatewayId: !Ref IGW
+  PublicSubnetA:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: "ap-northeast-2a"
+      CidrBlock: "10.0.1.0/24"
+      MapPublicIpOnLaunch: true
+      VpcId: !Ref VPC
+      Tags:
+        - Key: "Name"
+          Value: "portal-public-subnet-a"
+        - Key: "project"
+          Value: "portal"
+        - Key: "project:type"
+          Value: "general"
+  PublicSubnetB:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: "ap-northeast-2b"
+      CidrBlock: "10.0.2.0/24"
+      MapPublicIpOnLaunch: true
+      VpcId: !Ref VPC
+      Tags:
+        - Key: "Name"
+          Value: "portal-public-subnet-b"
+        - Key: "project"
+          Value: "portal"
+        - Key: "project:type"
+          Value: "general"
+  PrivateSubnetA:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: "ap-northeast-2a"
+      CidrBlock: "10.0.11.0/24"
+      MapPublicIpOnLaunch: false
+      VpcId: !Ref VPC
+      Tags:
+        - Key: "Name"
+          Value: "portal-private-subnet-a"
+        - Key: "project"
+          Value: "portal"
+        - Key: "project:type"
+          Value: "general"
+  PrivateSubnetB:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: "ap-northeast-2b"
+      CidrBlock: "10.0.12.0/24"
+      MapPublicIpOnLaunch: false
+      VpcId: !Ref VPC
+      Tags:
+        - Key: "Name"
+          Value: "portal-private-subnet-b"
+        - Key: "project"
+          Value: "portal"
+        - Key: "project:type"
+          Value: "general"
+  DatabaseSubnetA:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: "ap-northeast-2a"
+      CidrBlock: "10.0.21.0/24"
+      MapPublicIpOnLaunch: false
+      VpcId: !Ref VPC
+      Tags:
+        - Key: "Name"
+          Value: "portal-database-subnet-a"
+        - Key: "project"
+          Value: "portal"
+        - Key: "project:type"
+          Value: "general"
+  DatabaseSubnetB:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: "ap-northeast-2b"
+      CidrBlock: "10.0.22.0/24"
+      MapPublicIpOnLaunch: false
+      VpcId: !Ref VPC
+      Tags:
+        - Key: "Name"
+          Value: "portal-database-subnet-b"
+        - Key: "project"
+          Value: "portal"
+        - Key: "project:type"
+          Value: "general"
+  FirewallSubnetA:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: "ap-northeast-2a"
+      CidrBlock: "10.0.31.0/24"
+      MapPublicIpOnLaunch: false
+      VpcId: !Ref VPC
+      Tags:
+        - Key: "Name"
+          Value: "portal-firewall-subnet-a"
+        - Key: "project"
+          Value: "portal"
+        - Key: "project:type"
+          Value: "general"
+  FirewallSubnetB:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: "ap-northeast-2b"
+      CidrBlock: "10.0.32.0/24"
+      MapPublicIpOnLaunch: false
+      VpcId: !Ref VPC
+      Tags:
+        - Key: "Name"
+          Value: "portal-firewall-subnet-b"
+        - Key: "project"
+          Value: "portal"
+        - Key: "project:type"
+          Value: "general"
+  PublicSubnetARouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: "Name"
+          Value: "portal-public-a-route-table"
+        - Key: "project"
+          Value: "portal"
+        - Key: "project:type"
+          Value: "general"
+  PublicSubnetBRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: "Name"
+          Value: "portal-public-b-route-table"
+        - Key: "project"
+          Value: "portal"
+        - Key: "project:type"
+          Value: "general"
+  PrivateSubnetARouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: "Name"
+          Value: "portal-private-a-route-table"
+        - Key: "project"
+          Value: "portal"
+        - Key: "project:type"
+          Value: "general"
+  PrivateSubnetBRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: "Name"
+          Value: "portal-private-b-route-table"
+        - Key: "project"
+          Value: "portal"
+        - Key: "project:type"
+          Value: "general"
+  DatabaseSubnetRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: "Name"
+          Value: "portal-database-route-table"
+        - Key: "project"
+          Value: "portal"
+        - Key: "project:type"
+          Value: "general"
+  FirewallSubnetRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: "Name"
+          Value: "portal-firewall-route-table"
+        - Key: "project"
+          Value: "portal"
+        - Key: "project:type"
+          Value: "general"
+  PublicSubnetAPublicRouteTableAAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PublicSubnetARouteTable
+      SubnetId: !Ref PublicSubnetA
+  PublicSubnetBPublicRouteTableBAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PublicSubnetBRouteTable
+      SubnetId: !Ref PublicSubnetB
+  PrivateSubnetAPrivateRouteTableAAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PrivateSubnetARouteTable
+      SubnetId: !Ref PrivateSubnetA
+  PrivateSubnetBPrivateRouteTableBAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PrivateSubnetBRouteTable
+      SubnetId: !Ref PrivateSubnetB
+  DatabaseSubnetADatabaseRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref DatabaseSubnetRouteTable
+      SubnetId: !Ref DatabaseSubnetA
+  DatabaseSubnetBDatabaseRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref DatabaseSubnetRouteTable
+      SubnetId: !Ref DatabaseSubnetB
+  FirewallSubnetAFirewallRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref FirewallSubnetRouteTable
+      SubnetId: !Ref FirewallSubnetA
+  FirewallSubnetBFirewallRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref FirewallSubnetRouteTable
+      SubnetId: !Ref FirewallSubnetB
+  EipA:
+    Type: AWS::EC2::EIP
+    Properties:
+      Tags:
+        - Key: "Name"
+          Value: "portal-eip-a"
+        - Key: "project"
+          Value: "portal"
+        - Key: "project:type"
+          Value: "general"
+  EipB:
+    Type: AWS::EC2::EIP
+    Properties:
+      Tags:
+        - Key: "Name"
+          Value: "portal-eip-b"
+        - Key: "project"
+          Value: "portal"
+        - Key: "project:type"
+          Value: "general"
+  NatA:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId:
+        Fn::GetAtt:
+          - EipA
+          - AllocationId
+      SubnetId: !Ref PublicSubnetA
+      Tags:
+        - Key: "Name"
+          Value: "portal-nat-a"
+        - Key: "project"
+          Value: "portal"
+        - Key: "project:type"
+          Value: "general"
+  NatB:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId:
+        Fn::GetAtt:
+          - EipB
+          - AllocationId
+      SubnetId: !Ref PublicSubnetB
+      Tags:
+        - Key: "Name"
+          Value: "portal-nat-b"
+        - Key: "project"
+          Value: "portal"
+        - Key: "project:type"
+          Value: "general"
+  PublicRouteTableARouteIGW:
+    Type: AWS::EC2::Route
+    Properties:
+      DestinationCidrBlock: "0.0.0.0/0"
+      GatewayId: !Ref IGW
+      RouteTableId: !Ref PublicSubnetARouteTable
+  PublicRouteTableBRouteIGW:
+    Type: AWS::EC2::Route
+    Properties:
+      DestinationCidrBlock: "0.0.0.0/0"
+      GatewayId: !Ref IGW
+      RouteTableId: !Ref PublicSubnetBRouteTable
+  PrivateRouteTableARouteNat:
+    Type: AWS::EC2::Route
+    Properties:
+      DestinationCidrBlock: "0.0.0.0/0"
+      NatGatewayId: !Ref NatA
+      RouteTableId: !Ref PrivateSubnetARouteTable
+  PrivateRouteTableBRouteNat:
+    Type: AWS::EC2::Route
+    Properties:
+      DestinationCidrBlock: "0.0.0.0/0"
+      NatGatewayId: !Ref NatB
+      RouteTableId: !Ref PrivateSubnetBRouteTable
